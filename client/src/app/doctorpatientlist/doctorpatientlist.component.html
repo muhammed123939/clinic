@@ -1,0 +1,49 @@
+<table class="table table-striped table-bordered table-hover" style="margin-top: 5%;"  *ngIf="appointments">
+    <thead>
+        <tr class="table-dark">
+            <th scope="col" class="text-left">#</th>
+            <th scope="col">Appointment-ID</th>
+
+            @if(accountService.currentDoctor()){
+                <th scope="col">Patient-ID</th>
+                <th scope="col">Patient-Name</th>
+            }
+
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">case</th>
+
+            @if(accountPatientService.currentPatient())
+            {
+                <th scope="col">comment</th>
+            }
+
+            <th scope="col" class="text-center">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let appointment of appointments; let i = index ">
+            <th>{{i + 1}}</th>
+            <td>{{appointment.id}}</td>
+            @if(accountService.currentDoctor()){
+                <td>{{patients[i]?.id}}</td>
+                <td>{{patients[i]?.name}}</td>
+            }
+        
+            <td>{{appointment.date}}</td>
+            <td>{{appointment.time}}</td>
+        
+            <td>{{appointment.patientcase}}</td>
+            
+            @if(accountPatientService.currentPatient())
+            {
+                <td>{{appointment.patientcomment}}</td>
+            }
+
+            <td class="text-center">
+                <button class="btn btn-primary" (click)="edititem(appointment)">Edit</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

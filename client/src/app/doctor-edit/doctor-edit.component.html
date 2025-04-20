@@ -1,0 +1,113 @@
+@if(selecteduser) {
+
+    <div style="margin-top: 5%;" class="d-flex align-items-start">
+  
+      <div style=" margin-top: 10%; margin-left:5%;">
+        <img 
+          class="rounded-circle border border-secondary" 
+          style="width: 250px; height: 250px; object-fit: cover;" 
+          src="{{myphotos[0]?.url || './assets/user.png'}}" 
+          alt="User Image">
+        <br>
+      </div>
+  
+      <form  style="margin-left: 10%;"
+        id="editForm" 
+        class="ms-5 w-50" 
+        #editForm="ngForm" 
+        (ngSubmit)="edit()">
+        <h2 class="text-center text-primary my-4">Edit</h2>
+  
+        <div class="mb-3">
+          <label for="name" class="form-label">Name:</label>
+          <input 
+            type="hidden" 
+            [(ngModel)]="selecteduser.id" 
+            class="form-control" 
+            name="id">
+          <input 
+            type="hidden" 
+            [(ngModel)]="selecteduser.adminId" 
+            class="form-control" 
+            name="adminId">
+          <input 
+            type="text" 
+            [(ngModel)]="selecteduser.name" 
+            class="form-control" 
+            name="name" 
+            id="name">
+          <input 
+            type="hidden" 
+            [(ngModel)]="selecteduser.fieldId" 
+            class="form-control" 
+            name="fieldId">
+        </div>
+  
+        
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password"
+                 name="password"
+                 [(ngModel)]="selecteduser.password"
+                 (ngModelChange)="passwordTouched = true"
+                 id="password"
+                 class="form-control"
+                 style="border: 1px solid lightgray;">
+      </div>
+      
+      <div class="mb-3" *ngIf="passwordTouched">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <input type="password"
+                 name="confirmPassword"
+                 [(ngModel)]="confirmPassword"
+                 id="confirmPassword"
+                 class="form-control"
+                 required
+                 style="border: 1px solid lightgray;">
+          <div *ngIf="selecteduser.password !== confirmPassword && confirmPassword" class="text-danger mt-1">
+              Passwords do not match.
+          </div>
+      </div>
+    
+        <div class="mb-3">
+          <label for="age" class="form-label">Age:</label>
+          <input 
+            type="datetime-local" 
+            name="dateOfBirth" 
+            [(ngModel)]="selecteduser.dateOfBirth" 
+            class="form-control" 
+            id="dateOfBirth">
+        </div>
+
+        <div class="mb-3">
+          <label for="doctorprice" class="form-label">Doctor Price:</label>
+          <input 
+            type="number" 
+            name="doctorprice" 
+            [(ngModel)]="selecteduser.doctorPrice" 
+            class="form-control" 
+            id="doctorprice">
+        </div>
+  
+        <div class="mb-4">
+          <p>Register value: {{editForm.value | json}}</p>
+          <p>Register status: {{editForm.status | json}}</p>
+        </div>
+
+        
+        <div class="card-footer text-center">
+        <button [disabled]="!editForm.dirty || (passwordTouched && selecteduser.password !== confirmPassword)"
+        form="editForm" type="submit" class="btn btn-success w-50">
+    Save Changes
+</button>
+</div>
+        
+        @if (accountdoctorservice.currentDoctor()) {
+          <app-photo-editor></app-photo-editor>
+        }
+  
+      </form>
+  
+    </div>
+  }
+  

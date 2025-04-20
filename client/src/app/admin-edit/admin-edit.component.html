@@ -1,0 +1,76 @@
+@if(selecteduser)
+{
+<form id="editForm" style="margin-top: 5%;" #editForm="ngForm" (ngSubmit)="edit()">
+    <div class="container mt-5">
+        <div class="p-4" style="border: none;">
+            <h2 class="text-center text-primary mb-4">Edit User</h2>
+            <hr>
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="hidden" [(ngModel)]="selecteduser.id" class="form-control" name="id">
+                <input type="text" [(ngModel)]="selecteduser.name" class="form-control" name="name" id="name" required
+                    style="border: 1px solid lightgray;">
+            </div>
+
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password"
+                       name="password"
+                       [(ngModel)]="selecteduser.password"
+                       (ngModelChange)="passwordTouched = true"
+                       id="password"
+                       class="form-control"
+                       style="border: 1px solid lightgray;">
+            </div>
+            
+            <div class="mb-3" *ngIf="passwordTouched">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input type="password"
+                       name="confirmPassword"
+                       [(ngModel)]="confirmPassword"
+                       id="confirmPassword"
+                       class="form-control"
+                       required
+                       style="border: 1px solid lightgray;">
+                <div *ngIf="selecteduser.password !== confirmPassword && confirmPassword" class="text-danger mt-1">
+                    Passwords do not match.
+                </div>
+            </div>
+            
+            
+            
+            @if(accountservice.currentAdmin()?.cando)
+            {
+            <div class="mb-3">
+                <label for="store_Id" class="form-label">Store</label>
+                <input type="number" name="storeId" [(ngModel)]="selecteduser.storeId" id="store_Id"
+                    class="form-control" required style="border: 1px solid lightgray;">
+            </div>
+            }
+
+            @if(accountservice.currentAdmin()?.cando==false)
+            {
+            <input type="hidden" name="storeId" [(ngModel)]="selecteduser.storeId" id="store_Id" class="form-control"
+                required style="border: 1px solid lightgray;">
+            }
+
+            
+
+            <button [disabled]="!editForm.dirty || (passwordTouched && selecteduser.password !== confirmPassword)"
+        form="editForm" type="submit" class="btn btn-success col-6">
+    Save Changes
+</button>
+
+
+            <!-- Optional Debugging Information -->
+            <div class="mt-4">
+                <p>Form value: {{editForm.value | json}}</p>
+                <p>Form status: {{editForm.status | json}}</p>
+            </div>
+
+        </div>
+    </div>
+</form>
+}

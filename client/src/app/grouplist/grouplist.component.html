@@ -1,0 +1,22 @@
+<button class="btn btn-primary" style="display: inline; margin-top:7%; margin-left:40%; " (click)="signup()">Add
+    Group</button>
+
+<table class="table table-striped table-bordered table-hover mt-4" *ngIf="groups">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Group_ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let group of groups; let i = index">
+            <td>{{group.id}}</td>
+            <td>{{ group.name}}</td>
+            
+                <button class="btn btn-warning btn-sm" (click)="edititem(group)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteitem(group)">Delete</button>
+
+        </tr>
+    </tbody>
+</table>

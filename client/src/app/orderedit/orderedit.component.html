@@ -1,0 +1,48 @@
+@if(selectedorder)
+{
+<form id="editForm" class="container mt-5" #editForm="ngForm" (ngSubmit)="edit()">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 style="margin-top:10%;" class="text-center text-primary">Edit Order</h2>
+            
+            <div class="mb-3">
+                <label for="id" class="form-label">ID</label>
+                <input readonly="true" type="number" [(ngModel)]="selectedorder.id" name="id"  class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="admin_Id" class="form-label">Admin ID</label>
+                <input readonly="true" type="number" [(ngModel)]="selectedorder.adminId" name="adminId" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="product_Id" class="form-label">Product_ID</label>
+                <input readonly="true" type="number" [(ngModel)]="selectedorder.productId" name="productId" class="form-control" >
+            </div>
+
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input  readonly="true" type="number" [(ngModel)]="selectedorder.quantity" name="quantity" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="type" class="form-label">Type</label>
+                <input  readonly="true" type="string" [(ngModel)]="selectedorder.type" name="type" class="form-control" >
+            </div>
+            
+            <!-- Optional Debugging Information -->
+            <div class="mt-3">
+                <p>Form Value: {{editForm.value | json}}</p>
+                <p>Form Status: {{editForm.status | json}}</p>
+            </div>
+
+            <!-- Save Button -->
+            <div class="text-center mt-4">
+                <button [disabled]="!editForm.dirty" type="submit" class="btn btn-success px-5">    
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+}

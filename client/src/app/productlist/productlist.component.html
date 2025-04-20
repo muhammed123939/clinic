@@ -1,0 +1,30 @@
+<button class="btn btn-primary" style="display: inline; margin-top:7%; margin-left:40%; " (click)="signup()">Add
+    product</button>
+
+<table class="table table-striped table-bordered table-hover mt-4" *ngIf="products">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Store</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Group</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let product of products; let i = index">
+            <td>{{product.id}}</td>
+            <td>{{ product.name}}</td>
+            <td>{{ product.price}}</td>
+            <td>{{ stores[i].name}}</td>
+            <td>{{ product.quantity}}</td>
+            <td>{{ groups[i].name}}</td>
+            
+                <button class="btn btn-warning btn-sm" (click)="edititem(product)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteitem(product)">Delete</button>
+
+        </tr>
+    </tbody>
+</table>

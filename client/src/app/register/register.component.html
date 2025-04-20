@@ -1,0 +1,37 @@
+<form style="margin-top: 5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
+    <div class="container mt-5">
+        <div class="card shadow-sm p-4" style="border: none;">
+            <h2 class="text-center text-primary mb-4">Sign Up</h2>
+            <hr>
+
+            <app-text-input 
+                [formControl]="$any(registerForm.controls['adminname'])" 
+                [label]="'Admin Name'" 
+                class="form-control mb-3 border-0">
+            </app-text-input>
+
+            <app-text-input 
+                [formControl]="$any(registerForm.controls['adminpassword'])" 
+                [label]="'Password'"
+                [type]="'password'" 
+                class="form-control mb-3 border-0">
+            </app-text-input>
+
+            <app-text-input 
+                [formControl]="$any(registerForm.controls['confirmPassword'])" 
+                [label]="'Confirm Password'" 
+                [type]="'password'" 
+                class="form-control mb-3 border-0">
+            </app-text-input>
+
+            <div class="form-group text-center mt-4">
+                <button 
+                    [disabled]="!registerForm.valid" 
+                    class="btn btn-success me-2" 
+                    type="submit">
+                    Register
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

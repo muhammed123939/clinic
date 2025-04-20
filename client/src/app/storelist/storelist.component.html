@@ -1,0 +1,22 @@
+<button class="btn btn-primary" style="display: inline; margin-top:7%; margin-left:40%; " (click)="signup()">Add
+    Store</button>
+
+<table class="table table-striped table-bordered table-hover mt-4" *ngIf="stores">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let store of stores; let i = index">
+            <td>{{store.id}}</td>
+            <td>{{ store.name}}</td>
+            
+                <button class="btn btn-warning btn-sm" (click)="edititem(store)">Edit</button>
+                <button class="btn btn-danger btn-sm" (click)="deleteitem(store)">Delete</button>
+
+        </tr>
+    </tbody>
+</table>
