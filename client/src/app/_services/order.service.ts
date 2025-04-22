@@ -43,9 +43,7 @@ export class OrderService {
   }
 
   deleteorder(id: number) {
-    return this.http.delete(this.baseUrl + `order/${id}`).subscribe(x => {
-      console.log(x)
-    })
+    return this.http.delete(this.baseUrl + `order/${id}`);
   }
 
   getorderbyid(id: number): Observable<Order> {

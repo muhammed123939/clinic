@@ -7,6 +7,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Adminaddeddoctor } from '../_models/adminaddeddoctor';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-appointments-list',
@@ -73,9 +74,23 @@ export class AppointmentsListComponent implements OnInit {
 
   }
 
+  
   deleteitem(appointment: Appointment) {
-    this.AppointmentService.deleteappointment(appointment.id);
-    this.appointments = this.appointments.filter(a => a.id !== appointment.id);
-  }
-
+        Swal.fire({
+          title: 'Are you sure?',
+          text: `You are about to delete appointment whose ID =  ${appointment.id}. This action cannot be undone.`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.AppointmentService.deleteappointment(appointment.id).subscribe(() => {
+              this.appointments = this.appointments.filter(a => a.id !== appointment.id);
+              Swal.fire('Deleted!', `${appointment.id} has been deleted.`, 'success');
+            });
+          }
+        });
+      }
 }

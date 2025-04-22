@@ -38,9 +38,7 @@ export class ProductService {
   }
 
   deleteProduct(id: number) {
-    return this.http.delete(this.baseUrl + `product/${id}`).subscribe(x => {
-      console.log(x)
-    })
+    return this.http.delete(this.baseUrl + `product/${id}`);
   }
 
   getProductbyid(id: number): Observable<Product> {

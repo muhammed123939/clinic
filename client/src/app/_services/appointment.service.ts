@@ -38,9 +38,7 @@ export class AppointmentService {
   }
 
   deleteappointment(id: number) {
-    return this.http.delete(this.baseUrl + `appointment/${id}`).subscribe(x => {
-      console.log(x)
-    })
+    return this.http.delete(this.baseUrl + `appointment/${id}`);
   }
 
   getappointmentbyid(id: number): Observable<Appointment> {

@@ -26,9 +26,7 @@ export class GroupService {
   }
 
   deleteGroup(id: number) {
-    return this.http.delete(this.baseUrl + `group/${id}`).subscribe(x => {
-      console.log(x)
-    })
+    return this.http.delete(this.baseUrl + `group/${id}`);
   }
 
   getGroupbyid(id: number): Observable<Group> {

@@ -1,23 +1,20 @@
-<carousel>
-    <slide>
-      <img src="../../assets/slideshow/1.jpg" alt="first slide" style="margin-top: 10%;margin-left:20%; display: block; width: 50%;">
-      <div class="carousel-caption d-none d-md-block">
-        <h3 style=" margin-right: 10%; text-align:center;" >Second slide label</h3>
-        <p style=" margin-right: 10%; text-align: center;" >Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      </div>
-    </slide>
-    <slide>
-      <img src="../../assets/slideshow/2.jpg" alt="second slide" style="margin-top: 10%;margin-left:20%; display: block; width: 50%;">
-      <div class="carousel-caption d-none d-md-block">
-        <h3 style=" margin-right: 10%; text-align:center;" >Second slide label</h3>
-        <p style=" margin-right: 10%; text-align: center;" >Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      </div>
-    </slide>
-    <slide>
-      <img src="../../assets/slideshow/3.jpg" alt="third slide" style="margin-top: 10%;margin-left:20%; display: block; width: 50%;">
-      <div class="carousel-caption d-none d-md-block">
-        <h3 style=" margin-right: 10%; text-align:center;" >Second slide label</h3>
-        <p style=" margin-right: 10%; text-align: center;" >Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      </div>
-    </slide>
-  </carousel>
+<carousel [interval]="myInterval" [(activeSlide)]="activeSlideIndex" >
+  <slide *ngFor="let slide of slides; let index=index">
+    
+    <img [src]="slide.image" alt="image slide"  width="50%" style="margin-top:11%; margin-left:28% ;display: block; ">
+ 
+    <div class="carousel-caption">
+      <h4>Slide {{index+1}}</h4>
+      <p>{{slide.text}}</p>
+    </div>
+  </slide>
+</carousel>
+<br/>
+
+<!-- <div>
+  <span>Interval, in milliseconds (Enter a negative number or 0 to stop the interval.): </span>
+  <input type="number" class="form-control" [(ngModel)]="myInterval">
+</div>  -->
+
+
+

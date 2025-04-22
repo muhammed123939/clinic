@@ -16,9 +16,7 @@ export class AdminmemberService {
   baseUrl = environment.apiUrl;
 
   deleteadmin(id:number){
-  return this.http.delete(this.baseUrl + `admin/${id}` ).subscribe(x =>{
-  console.log(x)   
-  })
+  return this.http.delete(this.baseUrl + `admin/${id}` );
   }
 
   getMembers() : Observable <Adminmember[]>{

@@ -24,9 +24,7 @@ export class DoctormemberService {
   }
   
    deleteadmin(id:number){
-    return this.http.delete(this.baseUrl + `doctor/${id}` ).subscribe(x =>{
-    console.log(x)   
-    })
+    return this.http.delete(this.baseUrl + `doctor/${id}` );
     }
 
     getphotos(): Observable <Photo[]> {

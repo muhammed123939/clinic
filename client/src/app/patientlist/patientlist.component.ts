@@ -6,6 +6,7 @@ import { AccountService } from '../_services/account.service';
 import { Adminaddeddoctor } from '../_models/adminaddeddoctor';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-patientlist',
@@ -43,11 +44,26 @@ export class PatientlistComponent implements OnInit {
     this.router.navigateByUrl("/patientregister");
   }
 
-  deleteitem(patient: Patientmember) {
-    this.patientmemberservice.deletepatient(patient.id);
-    this.patients = this.patients!.filter(a => a.id !== patient.id);
-  }
 
+  deleteitem(patient: any) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete ${patient.name}. This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.patientmemberservice.deletepatient(patient.id).subscribe(() => {
+          this.patients = this.patients!.filter(a => a.id !== patient.id);
+          Swal.fire('Deleted!', `${patient.name} has been deleted.`, 'success');
+        });
+      }
+    });
+  }
+    
   onSearchChange(): void {
     const term = this.searchTerm.trim();
 

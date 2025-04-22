@@ -25,6 +25,8 @@ export class OrdereditComponent implements OnInit {
   }
   private toastr = inject(ToastrService);
   selectedorder?: Order;
+  originalOrder?: Order;
+
   orderid?: number;
 
   constructor(public orderService: OrderService, public accountservice: AccountService,
@@ -37,37 +39,64 @@ export class OrdereditComponent implements OnInit {
       this.loadorder(this.orderid!);
     }
 
-else{
-  this.orderService.authorder(this.myroute.snapshot.params['id']).subscribe((exists) => {
-    if (exists) {
-      this.orderid = this.myroute.snapshot.params['id'];
-      this.loadorder(this.orderid!);
+    else {
+      this.orderService.authorder(this.myroute.snapshot.params['id']).subscribe((exists) => {
+        if (exists) {
+          this.orderid = this.myroute.snapshot.params['id'];
+          this.loadorder(this.orderid!);
+        }
+        else {
+          this.toastr.error("you shall not pass")
+        }
+      });
+
     }
-    else{
-    this.toastr.error("you shall not pass")
-    }
-  });
-
-}
-  
-
-  }
-
-  edit() {
-    this.orderService.updateOrder(this.editForm?.value).subscribe({
-      next: _ => {
-        this.toastr.success('order edited successfully');
-        this.editForm?.reset(this.editForm?.value);
-      }
-    })
 
   }
 
   loadorder(orderid: number) {
     this.orderService.getorderbyid(orderid).subscribe({
-      next: (x) => (this.selectedorder = x), // Assign the fetched patient data
+      next: (x) => {
+        this.selectedorder = { ...x };
+        this.originalOrder = { ...x }; // store original state for comparison
+      }, // Assign the fetched patient data
       error: (err) => this.toastr.error(err.error), // Display the error message
     });
 
   }
+
+  edit() {
+    if (!this.hasChanges()) {
+      this.toastr.info('No changes to save.');
+      return;
+    }
+
+    const updatedOrder: Order = {
+      id: this.selectedorder!.id!,
+      adminId: this.selectedorder!.adminId!,
+      productId: this.selectedorder!.productId!,
+      quantity: this.selectedorder!.quantity!,
+      type: this.selectedorder!.type!
+    };
+
+
+    this.orderService.updateOrder(updatedOrder as Order).subscribe({
+      next: _ => {
+        this.toastr.success('Order edited successfully');
+        this.editForm?.reset(this.editForm?.value);
+
+        this.originalOrder = { ...updatedOrder }; // refresh original
+      },
+      error: err => this.toastr.error('Update failed')
+    });
+  }
+
+  hasChanges(): boolean {
+    if (!this.selectedorder || !this.originalOrder) return false;
+
+    const keys: (keyof Order)[] = ['id', 'adminId', 'productId', 'quantity', 'type'];
+
+    return keys.some((key) => this.selectedorder![key] !== this.originalOrder![key]);
+  }
+
 }

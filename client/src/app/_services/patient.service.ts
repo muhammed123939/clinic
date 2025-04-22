@@ -17,9 +17,7 @@ export class PatientService {
   };
 
   deletepatient(id: number) {
-    return this.http.delete(this.baseUrl + `patient/${id}`).subscribe(x => {
-      console.log(x)
-    })
+    return this.http.delete(this.baseUrl + `patient/${id}`);
   }
 
   getpatientbyid(id: number): Observable<Patientmember> {
@@ -45,6 +43,5 @@ export class PatientService {
   getPatients(): Observable<Patientmember[]> {
     return this.http.get<Patientmember[]>(this.baseUrl +'patient/' , this.httpOptions);
   }
-
 
 }

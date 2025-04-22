@@ -8,6 +8,7 @@ import { NgIf, NgFor } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Store } from '../_models/store';
 import { Group } from '../_models/group';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-productlist',
@@ -51,10 +52,23 @@ private toastr = inject(ToastrService);
     edititem(product: Product) {
       this.router.navigateByUrl(`editproduct/${product.id}`);
     }
-  
-    deleteitem(product: Product) {
-      this.productservice.deleteProduct(product.id);
-      this.products = this.products.filter(a => a.id !== product.id);
-    }
 
+    deleteitem(product: Product) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: `You are about to delete Product whose ID =  ${product.id}. This action cannot be undone.`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.productservice.deleteProduct(product.id).subscribe(() => {
+              this.products = this.products.filter(a => a.id !== product.id);
+              Swal.fire('Deleted!', `${product.id} has been deleted.`, 'success');
+            });
+          }
+        });
+      }
 }

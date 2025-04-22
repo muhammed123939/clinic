@@ -8,6 +8,7 @@ import { Fields } from '../_models/fields';
 import { Adminaddeddoctor } from '../_models/adminaddeddoctor';
 import { Adminmember } from '../_models/adminmember';
 import { Photo } from '../_models/photo';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-doctor-list',
@@ -50,10 +51,24 @@ export class DoctorListComponent implements OnInit {
   signupDoctor(){
     this.router.navigateByUrl("/doctorregister"); 
   }
+
   
   deleteitem(doctor: Doctormember) {
-    this.doctormemberService.deleteadmin(doctor.id);
-    this.doctors = this.doctors.filter(a => a.id !== doctor.id); 
-
-  }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: `You are about to delete ${doctor.name}. This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.doctormemberService.deleteadmin(doctor.id).subscribe(() => {
+            this.doctors = this.doctors.filter(a => a.id !== doctor.id); 
+            Swal.fire('Deleted!', `${doctor.name} has been deleted.`, 'success');
+          });
+        }
+      });
+    }
 }

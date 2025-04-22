@@ -27,9 +27,7 @@ export class StoreService {
   }
 
   deletestore(id: number) {
-    return this.http.delete(this.baseUrl + `store/${id}`).subscribe(x => {
-      console.log(x)
-    })
+    return this.http.delete(this.baseUrl + `store/${id}`);
   }
 
   getstorebyid(id: number): Observable<Store> {

@@ -10,7 +10,7 @@ import { AccountpatientService } from './_services/accountpatient.service';
 @Component({
   selector: 'app-root'  , 
   standalone: true,
-  imports: [RouterOutlet, NavComponent, SlideshowComponent ,NgxSpinnerComponent],
+  imports: [RouterOutlet, NavComponent ,NgxSpinnerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

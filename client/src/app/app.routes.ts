@@ -47,15 +47,15 @@ export const routes: Routes = [
                { path: 'patientlist', component: PatientlistComponent },
                { path: 'Orderlist', component: OrderlistComponent },
                { path: 'AppointmentList', component: AppointmentsListComponent },
-               
+
                { path: 'editproduct/:id', component: ProducteditComponent },
                { path: 'editGroup/:id', component: GroupeditComponent },
                { path: 'editStore/:id', component: StoreeditComponent },
                { path: 'editadmin/:id', component: AdminEditComponent },
-               { path: 'editdoctor/:id', component: DoctorEditComponent } ,
-               { path: 'editorder/:id', component: OrdereditComponent } ,
-               { path: 'editappointment/:id', component: AppointmentsEditComponent } ,
-               { path: 'editpatient/:id', component: PatienteditComponent } ,
+               { path: 'editdoctor/:id', component: DoctorEditComponent },
+               { path: 'editorder/:id', component: OrdereditComponent },
+               { path: 'editappointment/:id', component: AppointmentsEditComponent },
+               { path: 'editpatient/:id', component: PatienteditComponent },
 
                { path: 'productregister', component: ProductregisterComponent },
                { path: 'storeregister', component: StoreregisterComponent },
@@ -74,8 +74,8 @@ export const routes: Routes = [
           canActivate: [authdoctorGuard],
           children: [
                { path: 'editdoctor', component: DoctorEditComponent },
-               { path: 'doctorpatientlist', component: DoctorpatientlistComponent } ,
-               { path: 'doctorpatientedit/:id', component: DoctorpatienteditComponent } 
+               { path: 'doctorpatientlist', component: DoctorpatientlistComponent },
+               { path: 'doctorpatientedit/:id', component: DoctorpatienteditComponent }
           ]
      }
      ,
@@ -85,12 +85,12 @@ export const routes: Routes = [
           runGuardsAndResolvers: 'always',
           canActivate: [authpatientGuard],
           children: [
-               { path: 'editpatient', component: PatienteditComponent } ,
-               { path: 'patientappointmentlist', component: DoctorpatientlistComponent } ,
-               { path: 'patientappointmentedit/:id', component: DoctorpatienteditComponent } 
+               { path: 'editpatient', component: PatienteditComponent },
+               { path: 'patientappointmentlist', component: DoctorpatientlistComponent },
+               { path: 'patientappointmentedit/:id', component: DoctorpatienteditComponent }
           ]
 
      }
 
-,
+     ,
      { path: '**', component: AppComponent, pathMatch: 'full' }];

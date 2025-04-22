@@ -1,133 +1,134 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark {{navname}}">
   <div class="container">
     <a class="navbar-brand fw-bold" routerLinkActive="active" routerLink="/">Clinic App</a>
 
-    <button 
-      class="navbar-toggler" 
-      type="button" 
-      data-bs-toggle="collapse" 
-      data-bs-target="#navbarContent" 
-      aria-controls="navbarContent" 
-      aria-expanded="false" 
-      aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarContent">
-      <ul style="margin-left: 15%;"  class="navbar-nav me-auto mb-2 mb-md-0">
+      <ul style="margin-left: 15%;" class="navbar-nav me-auto mb-2 mb-md-0">
+
+        @if(isLoggedIn()){
+        <li class="nav-item">
+          <span style="font-size: 30px; color: whitesmoke;"> {{name}}</span>
+        </li>
+        }
 
         @if (accountdoctorService.currentDoctor()) {
-          <li class="nav-item">
-            <a routerLink="/doctorpatientlist" routerLinkActive="active" class="nav-link text-uppercase">Appointments</a>
-          </li>
+        <li class="nav-item">
+          <a routerLink="/doctorpatientlist" routerLinkActive="active" class="nav-link text-uppercase">Appointments</a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/editdoctor" class="dropdown-item">Edit-profile</a>
+        </li>
+
+        <li class="nav-item">
+          <a (click)="logoutdoctor()" class="nav-link logout-link text-uppercase" style="cursor: pointer;">
+            Log Out
+          </a>
+        </li>
         }
 
-        
         @if (accountpatientService.currentPatient()) {
-          <li class="nav-item">
-            <a routerLink="/patientappointmentlist" routerLinkActive="active" class="nav-link text-uppercase">Appointments</a>
-          </li>
+        <li class="nav-item">
+          <a routerLink="/patientappointmentlist" routerLinkActive="active"
+            class="nav-link text-uppercase">Appointments</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/editpatient" class="dropdown-item">Edit-profile</a>
+        </li>
+        <li class="nav-item">
+          <a (click)="logoutpatient()" class="nav-link logout-link text-uppercase" style="cursor: pointer;">
+            Log Out
+          </a>
+        </li>
         }
 
-
-        
         @if (accountService.currentAdmin()) {
-          <li class="nav-item">
-            <a routerLink="/Adminlist" routerLinkActive="active" class="nav-link text-uppercase">Admins</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/doctorlist" routerLinkActive="active" class="nav-link text-uppercase">Doctors</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/patientlist" routerLinkActive="active" class="nav-link text-uppercase">Patients</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/AppointmentList" routerLinkActive="active" class="nav-link text-uppercase">Appointments</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/Orderlist" routerLinkActive="active" class="nav-link text-uppercase">Orders</a>
-          </li>
-          @if(accountService.currentAdmin()?.cando)
-          {
-            <li class="nav-item">
-              <a routerLink="/grouplist" routerLinkActive="active" class="nav-link text-uppercase">Groups</a>
-            </li>  
-            <li class="nav-item">
-              <a routerLink="/productlist" routerLinkActive="active" class="nav-link text-uppercase">Products</a>
-            </li>
-            <li class="nav-item">
-              <a routerLink="/storelist" routerLinkActive="active" class="nav-link text-uppercase">Stores</a>
-            </li>
-          
-          }
+        <li class="nav-item">
+          <a routerLink="/Adminlist" routerLinkActive="active" class="nav-link text-uppercase">Admins</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/doctorlist" routerLinkActive="active" class="nav-link text-uppercase">Doctors</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/patientlist" routerLinkActive="active" class="nav-link text-uppercase">Patients</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/AppointmentList" routerLinkActive="active" class="nav-link text-uppercase">Appointments</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/Orderlist" routerLinkActive="active" class="nav-link text-uppercase">Orders</a>
+        </li>
+
+        @if(accountService.currentAdmin()?.cando)
+        {
+        <li class="nav-item">
+          <a routerLink="/grouplist" routerLinkActive="active" class="nav-link text-uppercase">Groups</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/productlist" routerLinkActive="active" class="nav-link text-uppercase">Products</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/storelist" routerLinkActive="active" class="nav-link text-uppercase">Stores</a>
+        </li>
+        }
+
+        <li class="nav-item">
+          <a routerLink="/editadmin/{{accountService.currentAdmin()?.id}}"
+            class="nav-link text-uppercase">Edit-profile</a>
+        </li>
+
+        <li class="nav-item">
+          <a (click)="logout()" class="nav-link logout-link text-uppercase" style="cursor: pointer;">
+            Log Out
+          </a>
+        </li>
         }
       </ul>
-      @if (accountpatientService.currentPatient()) {
-        <div style="margin-left: 80%;" dropdown class="dropdown">
-          <a dropdownToggle class="dropdown-toggle text-light text-decoration-none">
-            welcome {{accountpatientService.currentPatient()?.name}}
-          </a>
-  
-          <div *dropdownMenu class="dropdown-menu">          
-            <a routerLink="/editpatient" class="dropdown-item">Edit-profile</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="logoutpatient()">logged-out</a>
-          </div>
-        </div>
-  
-      }
-      @if (accountdoctorService.currentDoctor()) {
-        <div style="margin-left: 80%;" dropdown class="dropdown">
-          <a dropdownToggle class="dropdown-toggle text-light text-decoration-none">
-            welcome {{accountdoctorService.currentDoctor()?.doctorname}}
-          </a>
-  
-          <div *dropdownMenu class="dropdown-menu">          
-            <a routerLink="/editdoctor" class="dropdown-item">Edit-profile</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" (click)="logoutdoctor()">logged-out</a>
-          </div>
-        </div>
-  
-      }
-       @if (accountService.currentAdmin()) {
-      <div style="margin-left: 10%;" dropdown class="dropdown">
-        <a dropdownToggle class="dropdown-toggle text-light text-decoration-none">
-          welcome {{accountService.currentAdmin()?.username}}
-        </a>
 
-        <div *dropdownMenu class="dropdown-menu">
-
-          <a routerLink="/editadmin/{{accountService.currentAdmin()?.id}}" class="dropdown-item">Edit-profile</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" (click)="logout()">logged-out</a>
+      <div style="margin-right: 30%;" class="login-forms"
+        *ngIf="!accountdoctorService.currentDoctor() && !accountService.currentAdmin() && !accountpatientService.currentPatient()">
+        <div class="login-selection text-white my-3">
+          <label style="font-size: larger; font-family:'Times New Roman', Times, serif;" for="userType">Choose user type
+            :</label>
+          <select id="userType" [(ngModel)]="selectedUserType" class="form-select">
+            <option value="admin">Admin</option>
+            <option value="doctor">Doctor</option>
+            <option value="patient">Patient</option>
+          </select>
         </div>
+
+        <!-- Doctor Login Form -->
+        <form *ngIf="selectedUserType === 'doctor'" #doctorForm="ngForm" (ngSubmit)="logindoctor()" class="login-form"
+          autocomplete="off">
+          <input name="Name" [(ngModel)]="modeldoctor.Name" class="form-control" placeholder="Doctor Name">
+          <input name="Password" [(ngModel)]="modeldoctor.Password" class="form-control" placeholder="Password"
+            type="password">
+          <button class="btn btn-outline-light mt-2" type="submit">Login Doctor</button>
+        </form>
+
+        <!-- Patient Login Form -->
+        <form *ngIf="selectedUserType === 'patient'" #patientForm="ngForm" (ngSubmit)="loginpatient()"
+          class="login-form" autocomplete="off">
+          <input name="Name" [(ngModel)]="modelpatient.Name" class="form-control" placeholder="Patient Name">
+          <input name="Password" [(ngModel)]="modelpatient.Password" class="form-control" placeholder="Password"
+            type="password">
+          <button class="btn btn-outline-light mt-2" type="submit">Login Patient</button>
+        </form>
+
+        <!-- Admin Login Form -->
+        <form *ngIf="selectedUserType === 'admin'" #adminForm="ngForm" (ngSubmit)="login()" class="login-form"
+          autocomplete="off">
+          <input name="Name" [(ngModel)]="model.Name" class="form-control" placeholder="Admin Name">
+          <input name="Password" [(ngModel)]="model.Password" class="form-control" placeholder="Password"
+            type="password">
+          <button class="btn btn-outline-light mt-2" type="submit">Login Admin</button>
+        </form>
       </div>
-
-      } 
-
-      @if (!accountdoctorService.currentDoctor() && !accountService.currentAdmin()&&!accountpatientService.currentPatient()) {
-        <div class="login-forms">
-          <form #loginform="ngForm" (ngSubmit)="logindoctor()" class="login-form" autocomplete="off">
-            <input name="Name" [(ngModel)]="modeldoctor.Name" class="form-control" placeholder="Doctor Name">
-            <input name="Password" [(ngModel)]="modeldoctor.Password" class="form-control" placeholder="Password" type="password">
-            <button class="btn btn-outline-light" type="submit">Login Doctor</button>
-          </form>
-        
-          <form #loginform="ngForm" (ngSubmit)="loginpatient()" class="login-form" autocomplete="off">
-            <input name="Name" [(ngModel)]="modelpatient.Name" class="form-control" placeholder="Patient Name">
-            <input name="Password" [(ngModel)]="modelpatient.Password" class="form-control" placeholder="Password" type="password">
-            <button class="btn btn-outline-light" type="submit">Login Patient</button>
-          </form>
-        
-          <form #loginform="ngForm" (ngSubmit)="login()" class="login-form" autocomplete="off">
-            <input name="Name" [(ngModel)]="model.Name" class="form-control" placeholder="Admin Name">
-            <input name="Password" [(ngModel)]="model.Password" class="form-control" placeholder="Password" type="password">
-            <button class="btn btn-outline-light" type="submit">Login Admin</button>
-          </form>
-        </div>
-        
-      }
     </div>
   </div>
 </nav>
