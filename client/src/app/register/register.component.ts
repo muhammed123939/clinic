@@ -1,8 +1,7 @@
-import { Component, inject, Input, OnInit, output } from '@angular/core';
+import { Component, inject, OnInit} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { TextInputComponent } from "../_forms/text-input/text-input.component";
-import { Router } from '@angular/router';
 import { JsonPipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 

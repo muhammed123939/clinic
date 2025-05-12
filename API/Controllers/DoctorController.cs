@@ -131,11 +131,50 @@ namespace API.Controllers
         {
             var doctors = await doctorRepository.GetDoctorsmemAsync();
             return Ok(doctors);
+
         }
+            [HttpPut("updatedoctorschedule/{doctorId}")]
+            public async Task<ActionResult> UpdateDoctorSchedule(int doctorId, updatescheduleDTO scheduleDto)
+            {
+                var doctor = await context.Doctors.FindAsync(doctorId);
+                if (doctor == null)
+                return NotFound("Doctor not found");
+
+                // Remove old schedule entries
+                var oldSchedules = await context.Schedules
+                    .Where(s => s.DoctorId == doctorId)
+                    .ToListAsync();
+
+                context.Schedules.RemoveRange(oldSchedules);
+
+                // Parse time safely
+                if (!TimeSpan.TryParse(scheduleDto.StartTime, out var startTime) ||
+                    !TimeSpan.TryParse(scheduleDto.EndTime, out var endTime))
+                {
+                    return BadRequest("Invalid time format.");
+                }
+
+                // Add new schedule entries
+                foreach (var day in scheduleDto.AvailableDays)
+                {
+                    context.Schedules.Add(new Schedule
+                    {
+                        DoctorId = doctorId,
+                        DayOfWeek = (DayOfWeek)day,
+                        StartTime = startTime,
+                        EndTime = endTime
+                    });
+                }
+
+                await context.SaveChangesAsync();
+                return Ok();
+
+            }
 
         [HttpPut]
         public async Task<ActionResult> UpdateUser(DoctorMemberDTO doctorMemberDTO)
         {
+
             var editteddoctor = new DoctorMemberUpdateDTO();
 
             var doctor = await doctorRepository.GetDoctorById(doctorMemberDTO.id);

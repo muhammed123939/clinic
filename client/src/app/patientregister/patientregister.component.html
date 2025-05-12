@@ -1,10 +1,9 @@
-<form class="container mt-5" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" style="max-width: 500px;">
-    <h2 style="margin-top:15%;" class="text-center text-primary">Sign Up for Patient</h2>
+<form class="container" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" style="max-width: 500px;">
+    <h2 style="margin-top:1%;" class="text-center text-primary">Sign Up for Patient</h2>
     <hr />
   
     <!-- Name -->
     <div class="mb-3">
-      <label for="name" class="form-label">Name</label>
       <input 
         id="name" 
         formControlName="name" 
@@ -17,11 +16,9 @@
       </div>
     </div>
   
-
-    
     <!-- Gender -->
     <div class="mb-3">
-      <label for="gender" class="form-label">Gender</label>
+      <label for="gender" class="form-label">Gender</label><br>
       <select id="gender" formControlName="gender" class="form-select">
         <option value="">Select Gender</option>
         <option value="male">Male</option>
@@ -34,7 +31,6 @@
   
     <!-- Mobile -->
     <div class="mb-3">
-      <label for="mobile" class="form-label">Mobile</label>
       <input 
         id="mobile" 
         formControlName="mobile" 
@@ -50,7 +46,7 @@
 
     <!-- Birthdate -->
     <div class="mb-3">
-      <label for="dateOfBirth" class="form-label">dateOfBirth</label>
+      <label for="dateOfBirth" class="form-label">Date Of Birth</label>
       <input 
         id="dateOfBirth" 
         formControlName="dateOfBirth" 
@@ -63,7 +59,6 @@
   
     <!-- National ID -->
     <div class="mb-3">
-      <label for="nationalnumber" class="form-label">National ID</label>
       <input 
         id="nationalnumber" 
         formControlName="nationalnumber" 

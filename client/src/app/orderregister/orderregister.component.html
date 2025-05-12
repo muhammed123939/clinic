@@ -1,18 +1,17 @@
-<form style="margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" class="container p-4 border rounded shadow-sm bg-light">
+<form style=" width: 50%; margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off"
+    class="container p-4 border rounded shadow-sm bg-light">
     <h2 class="text-center text-primary mb-4">Add Order</h2>
     <hr>
 
     <div class="mb-3">
-        <label for="type" class="form-label fw-bold">Choose Type</label>
         <select id="type" class="form-select" [formControl]="$any(registerForm.controls['type'])">
             <option value="" disabled selected>-- Select a Type --</option>
-            <option value="IN">IN</option>  
-            <option value="OUT">OUT</option>  
+            <option value="IN">IN</option>
+            <option value="OUT">OUT</option>
         </select>
     </div>
 
     <div class="mb-3">
-        <label for="productId" class="form-label fw-bold">Choose Product</label>
         <select id="productId" class="form-select" [formControl]="$any(registerForm.controls['productId'])">
             <option value="" disabled selected>-- Select a Product --</option>
             @for (productt of products; track $index) {
@@ -21,15 +20,14 @@
         </select>
     </div>
 
-        <!-- Hidden Admin ID -->
-        <input type="hidden" [formControl]="$any(registerForm.controls['adminId'])">
+    <!-- Hidden Admin ID -->
+    <input type="hidden" [formControl]="$any(registerForm.controls['adminId'])">
 
     <div class="mb-3">
-        <label for="quantity" class="form-label fw-bold">Quantity</label>
-        <input type="number" id="quantity" class="form-control"  [formControl]="$any(registerForm.controls['quantity'])">
+        <input type="number" id="quantity" class="form-control" placeholder="Quantity"
+            [formControl]="$any(registerForm.controls['quantity'])">
     </div>
 
-    
     <!-- Submit Button -->
     <div class="text-center">
         <button [disabled]="!registerForm.valid" class="btn btn-success px-4" type="submit">Register</button>

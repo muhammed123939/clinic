@@ -19,6 +19,10 @@ export class DoctormemberService {
   };
   baseUrl = environment.apiUrl;
   
+  updateSchedule(doctorId: number, schedule: { availableDays: number[], startTime: string, endTime: string }) {
+    return this.http.put(this.baseUrl + `doctor/updatedoctorschedule/${doctorId}`, schedule);
+  }
+  
   deletephoto(id:number){
     return this.http.delete(this.baseUrl + `doctor/deletephoto/${id}` )
   }

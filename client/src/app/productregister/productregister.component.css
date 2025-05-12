@@ -1,0 +1,90 @@
+/* Main form container */
+form.container {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    padding: 2rem 2.5rem;
+    margin-bottom: 4rem;
+    max-width: 600px;
+    margin-top: 5%;
+  }
+  
+  /* Headline */
+  h2 {
+    font-weight: 600;
+    font-size: 1.8rem;
+    color: #0d6efd;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Input fields and selects */
+  .form-control,
+  .form-select {
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease-in-out;
+    box-shadow: none;
+    border: 1px solid #ced4da;
+  }
+  
+  .form-control:focus,
+  .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.2);
+  }
+  
+  /* Placeholder styling */
+  input::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+  }
+  
+  /* Submit button styling */
+  button[type="submit"] {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.6rem 2rem;
+    border-radius: 2rem;
+    background-color: #198754;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+    border: none;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #157347;
+    transform: scale(1.04);
+    box-shadow: 0 4px 14px rgba(25, 135, 84, 0.25);
+  }
+  
+  /* Divider line */
+  hr {
+    margin: 1.5rem 0;
+    border-top: 1px solid #dee2e6;
+  }
+  
+  /* Debugging section */
+  p {
+    font-size: 0.85rem;
+    color: #6c757d;
+    word-break: break-word;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    form.container {
+      padding: 1.5rem;
+      max-width: 100%;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    button[type="submit"] {
+      width: 100%;
+      padding: 0.75rem;
+    }
+  }
+  

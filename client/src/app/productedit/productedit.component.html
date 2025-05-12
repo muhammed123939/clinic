@@ -27,7 +27,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="groupId" class="form-label">Group</label>
+                <label for="groupId" class="form-label">Group</label><br>
                 <select name="groupId" [(ngModel)]="selectedproduct.groupId">
                     @for (group of groups; track $index) {
                     <option value={{group.id}}>{{group.name}}</option>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="mb-3">
-                <label for="storeId" class="form-label">Store</label>
+                <label for="storeId" class="form-label">Store</label><br>
                 <select name="storeId" [(ngModel)]="selectedproduct.storeId">
                     @for (store of stores; track $index) {
                     <option value={{store.id}}>{{store.name}}</option>

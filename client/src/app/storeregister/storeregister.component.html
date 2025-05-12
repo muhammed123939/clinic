@@ -1,10 +1,9 @@
-<form style="margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" class="container p-4 border rounded shadow-sm bg-light">
+<form style="width: 50%; margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" class="container p-4 border rounded shadow-sm bg-light">
     <h2 class="text-center text-primary mb-4">Add Store</h2>
     <hr>
 
     <div class="mb-3">
-        <label for="name" class="form-label fw-bold">Name</label>
-        <input type="text" id="name" class="form-control"  [formControl]="$any(registerForm.controls['name'])">
+        <input placeholder="Name" type="text" id="name" class="form-control"  [formControl]="$any(registerForm.controls['name'])">
     </div>
 
     <!-- Submit Button -->

@@ -1,25 +1,34 @@
-<form style="margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off"
+<form style=" width: 50%; margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off"
     class="container p-4 border rounded shadow-sm bg-light">
     <h2 class="text-center text-primary mb-4">Add Appointment</h2>
 
     <hr>
     <!-- Hidden Admin ID -->
     <input type="hidden" [formControl]="$any(registerForm.controls['adminId'])">
-
+    <div *ngIf="schedule.length > 0" class="mt-4">
+        <h5 class="text-secondary">Doctor's Schedule:</h5>
+        <ul class="list-group">
+          <li *ngFor="let s of schedule" class="list-group-item">
+            <strong>{{ dayNames[+s.dayOfWeek] }}:</strong>
+            {{ s.startTime }} - {{ s.endTime }}
+          </li>
+        </ul>
+      </div>
+      
+      
     <!-- Choose Doctor -->
     <div class="mb-3">
-        <label for="doctorId" class="form-label fw-bold">Choose Doctor</label>
-        <select id="doctorId" class="form-select" [formControl]="$any(registerForm.controls['doctorId'])">
-            <option value="" disabled selected>-- Select a Doctor --</option>
-            @for (doctor of doctors; track $index) {
-            <option value={{doctor.id}}>{{doctor.name}} = {{doctor.doctorPrice}}</option>
-            }
-        </select>
+        <select id="doctorId" class="form-select" formControlName="doctorId" (change)="onDoctorChange($event)">
+            <option value="" disabled>-- Select a Doctor --</option>
+            <option *ngFor="let doctor of doctors" [value]="doctor.id">
+              {{ doctor.name }} = {{ doctor.doctorPrice }}
+            </option>
+          </select>
+          
     </div>
 
     <!-- Choose Patient -->
     <div class="mb-3">
-        <label for="patientId" class="form-label fw-bold">Choose Patient</label>
         <select id="patientId" class="form-select" [formControl]="$any(registerForm.controls['patientId'])">
             <option value="" disabled selected>-- Select a Patient --</option>
             @for (patient of patients; track $index) {
@@ -35,13 +44,11 @@
 
     <!-- Date -->
     <div class="mb-3">
-        <label for="date" class="form-label fw-bold">Date</label>
         <input id="date" class="form-control" type="date" [formControl]="$any(registerForm.controls['date'])">
     </div>
 
     <!-- Time -->
     <div class="mb-3">
-        <label for="time" class="form-label fw-bold">Time</label>
         <input id="time" class="form-control" type="time" step="1" [formControl]="$any(registerForm.controls['time'])">
     </div>
 

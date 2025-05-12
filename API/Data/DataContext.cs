@@ -7,6 +7,8 @@ namespace API.Data;
 public class DataContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Store> Stores { get; set; }
+    
+    public DbSet<Schedule> Schedules { get; set; }
     public DbSet<Products> Products { get; set; }
     public DbSet<Orders> Orders { get; set; }
     public DbSet<Groups> Groups { get; set; }
@@ -29,6 +31,10 @@ public class DataContext(DbContextOptions options) : DbContext(options)
             .HasOne(d => d.Fields)
             .WithMany(f => f.Doctors);
 
+       modelBuilder.Entity<Schedule>()
+            .HasOne(s => s.Doctor)
+            .WithMany(d => d.Schedules)
+            .HasForeignKey(s => s.DoctorId);
 
         modelBuilder.Entity<Patients>()
             .HasOne(p => p.Admins)

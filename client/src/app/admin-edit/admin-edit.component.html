@@ -1,9 +1,9 @@
 @if(selecteduser)
 {
-<form id="editForm" style="margin-top: 5%;" #editForm="ngForm" (ngSubmit)="edit()">
-    <div class="container mt-5">
+<form id="editForm" style="margin-left:30%; width: 50%; margin-top:4%;" #editForm="ngForm" (ngSubmit)="edit()">
+    <div class="container">
         <div class="p-4" style="border: none;">
-            <h2 class="text-center text-primary mb-4">Edit User</h2>
+            <h2 class="text-center text-primary mb-4">Edit Admin</h2>
             <hr>
 
             <div class="mb-3">
@@ -13,34 +13,22 @@
                     style="border: 1px solid lightgray;">
             </div>
 
-
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password"
-                       name="password"
-                       [(ngModel)]="selecteduser.password"
-                       (ngModelChange)="passwordTouched = true"
-                       id="password"
-                       class="form-control"
-                       style="border: 1px solid lightgray;">
+                <input type="password" name="password" [(ngModel)]="selecteduser.password"
+                    (ngModelChange)="passwordTouched = true" id="password" class="form-control"
+                    style="border: 1px solid lightgray;">
             </div>
-            
+
             <div class="mb-3" *ngIf="passwordTouched">
                 <label for="confirmPassword" class="form-label">Confirm Password</label>
-                <input type="password"
-                       name="confirmPassword"
-                       [(ngModel)]="confirmPassword"
-                       id="confirmPassword"
-                       class="form-control"
-                       required
-                       style="border: 1px solid lightgray;">
+                <input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" id="confirmPassword"
+                    class="form-control" required style="border: 1px solid lightgray;">
                 <div *ngIf="selecteduser.password !== confirmPassword && confirmPassword" class="text-danger mt-1">
                     Passwords do not match.
                 </div>
             </div>
-            
-            
-            
+
             @if(accountservice.currentAdmin()?.cando)
             {
             <div class="mb-3">
@@ -56,14 +44,13 @@
                 required style="border: 1px solid lightgray;">
             }
 
-            
-
-            <button [disabled]="!editForm.dirty || (passwordTouched && selecteduser.password !== confirmPassword)"
-        form="editForm" type="submit" class="btn btn-success col-6">
-    Save Changes
-</button>
-
-
+            <div class="text-center" >
+                <button [disabled]="!editForm.dirty || (passwordTouched && selecteduser.password !== confirmPassword)"
+                form="editForm" type="submit" class="btn btn-success col-6">
+                Save Changes
+            </button>
+            </div>
+ 
             <!-- Optional Debugging Information -->
             <div class="mt-4">
                 <p>Form value: {{editForm.value | json}}</p>

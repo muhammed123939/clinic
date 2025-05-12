@@ -35,30 +35,29 @@
                 <input type="text" [(ngModel)]="selectedappointment.patientcase" class="form-control" name="patientcase"
                     id="patientcase" required>
             </div>
-
             }
 
             @if(patientaccountService.currentPatient()){
-        
-                      <!-- Hidden Inputs -->
+
+            <!-- Hidden Inputs -->
             <input type="hidden" [(ngModel)]="selectedappointment.id" class="form-control" name="id">
             <input type="hidden" [(ngModel)]="selectedappointment.adminId" class="form-control" name="adminId">
             <input type="hidden" [(ngModel)]="selectedappointment.doctorId" class="form-control" name="doctorId">
             <input type="hidden" [(ngModel)]="selectedappointment.patientId" class="form-control" name="patientId">
             <input type="hidden" [(ngModel)]="selectedappointment.patientcomment" class="form-control"
                 name="patientcomment">
-                <input type="hidden" [(ngModel)]="selectedappointment.date" class="form-control" name="date" id="date"
-                    required>
+            <input type="hidden" [(ngModel)]="selectedappointment.date" class="form-control" name="date" id="date"
+                required>
 
+            <input type="hidden" step="1" [(ngModel)]="selectedappointment.time" class="form-control" name="time"
+                id="time" required>
 
-                <input type="hidden" step="1" [(ngModel)]="selectedappointment.time" class="form-control" name="time"
-                    id="time" required>
-         
             <div class="mb-3">
                 <label for="patientcomment" class="form-label">patientcomment</label>
                 <input type="text" [(ngModel)]="selectedappointment.patientcomment" class="form-control"
                     name="patientcomment" id="patientcomment" required>
             </div>
+
             <!-- Case Input -->
             <div class="mb-3">
                 <label for="patientcase" class="form-label">Case</label>
@@ -76,7 +75,7 @@
 
             <!-- Save Changes Button -->
             <div class="text-center mt-4">
-                <button [disabled]="!editForm.dirty" form="editForm" type="submit" class="btn btn-success col-6">
+                <button [disabled]="!editForm.dirty" form="editForm" type="submit" class="btn btn-success">
                     Save Changes
                 </button>
             </div>

@@ -74,6 +74,10 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("patientcomment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AdminId");
@@ -229,11 +233,9 @@ namespace API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<byte[]>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("BLOB");
 
                     b.Property<byte[]>("PasswordSalt")
-                        .IsRequired()
                         .HasColumnType("BLOB");
 
                     b.HasKey("Id");
@@ -298,6 +300,34 @@ namespace API.Migrations
                         .IsUnique();
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("API.entities.Schedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Doctors")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("API.entities.Store", b =>
@@ -473,6 +503,17 @@ namespace API.Migrations
                     b.Navigation("store");
                 });
 
+            modelBuilder.Entity("API.entities.Schedule", b =>
+                {
+                    b.HasOne("API.entities.Doctors", "Doctor")
+                        .WithMany("Schedules")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("CaseDescriptionDoctors", b =>
                 {
                     b.HasOne("API.entities.CaseDescription", null)
@@ -533,6 +574,8 @@ namespace API.Migrations
                 {
                     b.Navigation("Photos")
                         .IsRequired();
+
+                    b.Navigation("Schedules");
 
                     b.Navigation("appointments");
                 });

@@ -16,4 +16,8 @@ public class RegisterDoctorDTO
     [Required] public int adminId { get; set; }
     [Required] public int fieldId { get; set; }
     [Required] public int doctorprice { get; set; }
+    
+    public List<int> AvailableDays { get; set; }   // e.g., [0,1,3] for Sunday, Monday, Wednesday
+    public string StartTime { get; set; }          // e.g., "09:00"
+    public string EndTime { get; set; }    
 }

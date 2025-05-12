@@ -4,7 +4,6 @@ using API.entities;
 using API.interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +11,50 @@ namespace API.Controllers
 {
     public class AppointmentController(DataContext context, IAppointmentRepository appointmentRepository, IMapper mapper) : BaseApiController
     {
+        private List<TimeSlot> GenerateTimeSlots(TimeSpan start, TimeSpan end, TimeSpan interval)
+        {
+            var slots = new List<TimeSlot>();
+            var current = start;
+
+            while (current + interval <= end)
+            {
+                slots.Add(new TimeSlot
+                {
+                    Start = current,
+                    End = current + interval
+                });
+
+                current += interval;
+            }
+
+            return slots;
+        }
+
+        [HttpGet("GetAvailableSlots")]
+        public async Task<List<TimeSlot>> GetAvailableSlots(int doctorId, DateTime date)
+        {
+            var schedule = await context.Schedules
+                .Where(s => s.DoctorId == doctorId && s.DayOfWeek == date.DayOfWeek)
+                .FirstOrDefaultAsync();
+
+            if (schedule == null) return new List<TimeSlot>();
+
+            var dateOnly = DateOnly.FromDateTime(date);
+
+            var appointments = await context.Appointments
+                .Where(a => a.DoctorId == doctorId && a.Date == dateOnly)
+                .ToListAsync();
+
+            var slots = GenerateTimeSlots(schedule.StartTime, schedule.EndTime, TimeSpan.FromMinutes(30));
+
+            foreach (var appt in appointments)
+            {
+                slots.RemoveAll(s => s.Start == appt.Time.ToTimeSpan()); // ✅ both are TimeSpan now
+
+            }
+
+            return slots;
+        }
 
         [HttpGet("getDoctors")]
         public async Task<ActionResult<IEnumerable<AdminAddedDoctorDTO>>> getDoctors()
@@ -61,11 +104,10 @@ namespace API.Controllers
                     PatientId = a.PatientId,
                     AdminId = a.AdminId,
                     Date = a.Date,
-                    Time = a.Time , 
-                    Patientcomment=a.patientcomment
+                    Time = a.Time,
+                    Patientcomment = a.patientcomment
                 })
                 .ToListAsync();
-
 
             if (!appointments.Any())
             {
@@ -80,7 +122,6 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAppointment(int id)
         {
-
             var appointment = await appointmentRepository.GetAppointmentsById(id);
 
             if (appointment == null) return NotFound();
@@ -101,127 +142,199 @@ namespace API.Controllers
             .ToListAsync();
         }
 
-        [HttpPost("registerappointment")] //acount/register     
+        [HttpGet("doctorschedule/{id}")]
+        public async Task<ActionResult<IEnumerable<scheduleDTO>>> GetDoctorSchedule(int id)
+        {
+        var schedule = await context.Schedules
+        .Where(s => s.DoctorId == id)
+        .Select(s => new scheduleDTO
+        {
+            DayOfWeek = s.DayOfWeek,
+            StartTime = s.StartTime,
+            EndTime = s.EndTime
+        })
+        .ToListAsync();
+
+         if (schedule.Any())
+         {
+        return Ok(schedule);
+        }
+        else
+         {
+         return BadRequest("Cannot find schedule for the doctor");
+        }
+        }
+
+        [HttpPost("registerappointment")]
         public async Task<ActionResult> Registerappointments(AppointmentDTO appointmentDTO)
         {
+            // 1. Check if there's a valid schedule for this doctor on that day
+            var schedule = await context.Schedules
+                .FirstOrDefaultAsync(s => s.DoctorId == appointmentDTO.DoctorId
+                    && s.DayOfWeek == appointmentDTO.Date.DayOfWeek);
+
+            if (schedule == null)
+            {
+                return BadRequest("Doctor is not scheduled on this day.");
+            }
+
+            var appointmentTime = new TimeOnly(appointmentDTO.Time.Hour, appointmentDTO.Time.Minute);
+
+            // Convert TimeOnly to TimeSpan (ticks based from midnight)
+            TimeSpan appointmentTimeSpan = appointmentTime.ToTimeSpan();
+            TimeSpan scheduleStartTimeSpan = schedule.StartTime;
+            TimeSpan scheduleEndTimeSpan = schedule.EndTime;
+
+            // Check if the appointment time is within the doctor's working hours
+            if (appointmentTimeSpan < scheduleStartTimeSpan || appointmentTimeSpan >= scheduleEndTimeSpan)
+            {
+                return BadRequest("Appointment time is outside of the doctor's working hours.");
+            }
+        
+                var appointmentStart = TimeOnly.FromTimeSpan(appointmentTimeSpan);
+                var appointmentEnd = appointmentStart.AddMinutes(15); // or any custom duration
+
+                // Pull potential conflicts into memory, then filter
+                var appointments = await context.Appointments
+                    .Where(a =>
+                        a.DoctorId == appointmentDTO.DoctorId &&
+                        a.Date == appointmentDTO.Date)
+                    .ToListAsync();
+
+                // Check for overlap in-memory
+                var isSlotTaken = appointments.Any(a =>
+                {
+                    var existingStart = a.Time;
+                    var existingEnd = existingStart.AddMinutes(15); // assuming 15-min appointment
+                    return existingStart < appointmentEnd && existingEnd > appointmentStart;
+                });
+
+                if (isSlotTaken)
+                {
+                    return BadRequest("This time slot is already booked.");
+                }
+
+
+            // 4. All good, map and save the appointment
             var newappointment = mapper.Map<Appointments>(appointmentDTO);
             newappointment.AdminId = appointmentDTO.AdminId;
             newappointment.DoctorId = appointmentDTO.DoctorId;
             newappointment.PatientId = appointmentDTO.PatientId;
             newappointment.Date = appointmentDTO.Date;
             newappointment.Time = appointmentDTO.Time;
-            newappointment.patientcase ="";
-            newappointment.patientcomment ="";
+            newappointment.patientcase = "";
+            newappointment.patientcomment = "";
+
             context.Appointments.Add(newappointment);
             await context.SaveChangesAsync();
-            return Ok();
 
+            return Ok();
         }
 
         [HttpGet("getappointment/{id}")]
         public async Task<ActionResult<AppointmentDTO>> getappointment(int id)
         {
             var appointment = await appointmentRepository.GetAppointmentsById(id);
-          
-           if(appointment!=null){
-            return Ok(appointment);
+
+            if (appointment != null)
+            {
+                return Ok(appointment);
             }
 
-            else{
+            else
+            {
                 return BadRequest("cannot find appointment");
             }
         }
-      
-      
-[HttpGet("GetAppointmentsByPatientedit/{appointmentId}/{patientId}")]
-public async Task<ActionResult<List<AppointmentDTO>>> GetAppointmentsByPatientedit(int appointmentId , int patientId )
-{
 
-    var appointment = await context.Appointments
-        .FromSqlInterpolated($"SELECT * FROM Appointments WHERE PatientId = {patientId} AND Id = {appointmentId}")
-        .Select(a => new AppointmentDTO
+
+        [HttpGet("GetAppointmentsByPatientedit/{appointmentId}/{patientId}")]
+        public async Task<ActionResult<List<AppointmentDTO>>> GetAppointmentsByPatientedit(int appointmentId, int patientId)
         {
-            Id = a.Id,
-            DoctorId = a.DoctorId,
-            PatientId = a.PatientId,
-            AdminId = a.AdminId,
-            Date = a.Date,
-            Time = a.Time,
-            Patientcase = a.patientcase , 
-            Patientcomment= a.patientcomment
-        })
-        .FirstOrDefaultAsync(); 
-    if (appointment != null)
-    {
-        return Ok(appointment);
-    }
-    else
-    {
-        return BadRequest("Cannot find appointment or you shall not pass");
-    }
-} 
 
+            var appointment = await context.Appointments
+                .FromSqlInterpolated($"SELECT * FROM Appointments WHERE PatientId = {patientId} AND Id = {appointmentId}")
+                .Select(a => new AppointmentDTO
+                {
+                    Id = a.Id,
+                    DoctorId = a.DoctorId,
+                    PatientId = a.PatientId,
+                    AdminId = a.AdminId,
+                    Date = a.Date,
+                    Time = a.Time,
+                    Patientcase = a.patientcase,
+                    Patientcomment = a.patientcomment
+                })
+                .FirstOrDefaultAsync();
+            if (appointment != null)
+            {
+                return Ok(appointment);
+            }
+            else
+            {
+                return BadRequest("Cannot find appointment or you shall not pass");
+            }
+        }
 
-     
-[HttpGet("GetAppointmentsByPatient/{patientId}")]
-public async Task<ActionResult<List<AppointmentDTO>>> GetAppointmentsByPatient(int patientId)
-{
-    var appointments = await context.Appointments
-        .FromSqlInterpolated($"SELECT * FROM Appointments WHERE PatientId = {patientId}")
-        .Select(a => new AppointmentDTO
+        [HttpGet("GetAppointmentsByPatient/{patientId}")]
+        public async Task<ActionResult<List<AppointmentDTO>>> GetAppointmentsByPatient(int patientId)
         {
-            Id = a.Id,
-            DoctorId = a.DoctorId,
-            PatientId = a.PatientId,
-            AdminId = a.AdminId,
-            Date = a.Date,
-            Time = a.Time,
-            Patientcase = a.patientcase,
-            Patientcomment = a.patientcomment
-        })
-        .ToListAsync(); // 👈 Get a list instead of just the first item
+            var appointments = await context.Appointments
+                .FromSqlInterpolated($"SELECT * FROM Appointments WHERE PatientId = {patientId}")
+                .Select(a => new AppointmentDTO
+                {
+                    Id = a.Id,
+                    DoctorId = a.DoctorId,
+                    PatientId = a.PatientId,
+                    AdminId = a.AdminId,
+                    Date = a.Date,
+                    Time = a.Time,
+                    Patientcase = a.patientcase,
+                    Patientcomment = a.patientcomment
+                })
+                .ToListAsync(); // 👈 Get a list instead of just the first item
 
-    if (appointments.Any())
-    {
-        return Ok(appointments); // ✅ return as List<AppointmentDTO>
-    }
-    else
-    {
-        return NotFound("No appointments found.");
-    }
-}
-      
-[HttpGet("getappointment2/{idappointment}/{iddoctor}")]
-public async Task<ActionResult<AppointmentDTO>> GetAppointmentByDoctor(int idappointment, int iddoctor)
-{
-    var appointment = await context.Appointments
-        .FromSqlInterpolated($"SELECT * FROM Appointments WHERE DoctorId = {iddoctor} AND Id = {idappointment}")
-        .Select(a => new AppointmentDTO
+            if (appointments.Any())
+            {
+                return Ok(appointments); // ✅ return as List<AppointmentDTO>
+            }
+            else
+            {
+                return NotFound("No appointments found.");
+            }
+        }
+
+        [HttpGet("getappointment2/{idappointment}/{iddoctor}")]
+        public async Task<ActionResult<AppointmentDTO>> GetAppointmentByDoctor(int idappointment, int iddoctor)
         {
-            Id = a.Id,
-            DoctorId = a.DoctorId,
-            PatientId = a.PatientId,
-            AdminId = a.AdminId,
-            Date = a.Date,
-            Time = a.Time,
-            Patientcase = a.patientcase  ,
-            Patientcomment = a.patientcomment
-        })
-        .FirstOrDefaultAsync(); // Execute the query and get the first result or null.
+            var appointment = await context.Appointments
+                .FromSqlInterpolated($"SELECT * FROM Appointments WHERE DoctorId = {iddoctor} AND Id = {idappointment}")
+                .Select(a => new AppointmentDTO
+                {
+                    Id = a.Id,
+                    DoctorId = a.DoctorId,
+                    PatientId = a.PatientId,
+                    AdminId = a.AdminId,
+                    Date = a.Date,
+                    Time = a.Time,
+                    Patientcase = a.patientcase,
+                    Patientcomment = a.patientcomment
+                })
+                .FirstOrDefaultAsync(); // Execute the query and get the first result or null.
 
-    if (appointment != null)
-    {
-        return Ok(appointment);
-    }
-    else
-    {
-        return BadRequest("Cannot find appointment or you shall not pass");
-    }
-}
+            if (appointment != null)
+            {
+                return Ok(appointment);
+            }
+            else
+            {
+                return BadRequest("Cannot find appointment or you shall not pass");
+            }
+        }
+
         [HttpPut]
         public async Task<ActionResult> UpdateAppointmet(AppointmentDTO appointmentDTO)
         {
-
             var appointment = await appointmentRepository.GetAppointmentsById(appointmentDTO.Id);
             if (appointment == null) return BadRequest("could not find appointment");
 
@@ -230,7 +343,5 @@ public async Task<ActionResult<AppointmentDTO>> GetAppointmentByDoctor(int idapp
             if (await appointmentRepository.SaveAllAsync()) return NoContent();
             return BadRequest("failed to update the appointment");
         }
-
     }
 }
-

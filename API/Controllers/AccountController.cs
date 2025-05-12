@@ -65,6 +65,7 @@ namespace API.Controllers
     [HttpPost("registerdoctor")] //acount/register     
     public async Task<ActionResult> Registerdoctor(RegisterDoctorDTO registerDTo)
     {
+
          if (await DoctorExists(registerDTo.doctorname)) return BadRequest("doctor name is taken");
 
         var existingadmin =  context.Admin.Find(registerDTo.adminId);
@@ -81,8 +82,27 @@ namespace API.Controllers
         newdoctor.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTo.doctorpassword));
         newdoctor.PasswordSalt = hmac.Key;
         newdoctor.DoctorPrice=registerDTo.doctorprice;
+        
         context.Doctors.Add(newdoctor);
         await context.SaveChangesAsync();
+            // Insert into Schedule table
+    if (registerDTo.AvailableDays != null && registerDTo.AvailableDays.Any())
+    {
+        
+        foreach (var day in registerDTo.AvailableDays)
+        {
+            var schedule = new Schedule
+            {
+                DoctorId = newdoctor.Id,
+                DayOfWeek = (DayOfWeek)day,
+                StartTime = TimeSpan.Parse(registerDTo.StartTime),
+                EndTime = TimeSpan.Parse(registerDTo.EndTime)
+            };
+            context.Schedules.Add(schedule);
+        }
+
+        await context.SaveChangesAsync(); // Save all schedules
+    }
         return Ok();
     }
 

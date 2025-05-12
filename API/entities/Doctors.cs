@@ -22,6 +22,8 @@ public class Doctors
     public Admins Admins { get; set; } 
     public Photos Photos { get; set; } 
     public List<Appointments> appointments { get; set; } = [];
+
+    public ICollection<Schedule> Schedules { get; set; }
     public ICollection<Patients> Patients { get; set; } =null!;
     public ICollection<CaseDescription> CaseDescription { get; set; } =null!;
   

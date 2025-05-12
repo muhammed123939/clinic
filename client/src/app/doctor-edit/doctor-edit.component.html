@@ -1,8 +1,8 @@
 @if(selecteduser) {
 
-    <div style="margin-top: 5%;" class="d-flex align-items-start">
+    <div style=" margin-top: 5%;" class="d-flex align-items-start">
   
-      <div style=" margin-top: 10%; margin-left:15%;">
+      <div style="margin-left:15%;">
         <img 
           class="rounded-circle border border-secondary" 
           style="width: 250px; height: 250px; object-fit: cover;" 
@@ -11,12 +11,12 @@
         <br>
       </div>
   
-      <form  style="margin-left: 10%;"
+      <form  style="width: 50%; margin-left: 1%;"
         id="editForm" 
         class="ms-5 w-50" 
         #editForm="ngForm" 
         (ngSubmit)="edit()">
-        <h2 class="text-center text-primary my-4">Edit</h2>
+        <h2 class="text-center text-primary my-4">Edit Doctor</h2>
   
         <div class="mb-3">
           <label for="name" class="form-label">Name:</label>
@@ -88,7 +88,36 @@
             class="form-control" 
             id="doctorprice">
         </div>
-  
+
+        <div class="mb-2">
+          <label class="form-label fw-semibold">Available Days</label><br>
+        
+          <div *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']; let i = index">
+            <input 
+              type="checkbox"
+              [value]="i" 
+              (change)="onDayCheckboxChange($event)">
+            {{ day }}
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <input 
+          id="startTime"
+          type="time" 
+          [(ngModel)]="startTime"
+          name="startTime"
+          class="form-control">
+
+        <input 
+          id="endTime"
+          type="time" 
+          [(ngModel)]="endTime"
+          name="endTime"
+          class="form-control">        
+
+        </div>
+
         <div class="mb-4">
           <p>Register value: {{editForm.value | json}}</p>
           <p>Register status: {{editForm.status | json}}</p>
@@ -98,9 +127,9 @@
         <div class="card-footer text-center">
         <button [disabled]="!editForm.dirty || (passwordTouched && selecteduser.password !== confirmPassword)"
         form="editForm" type="submit" class="btn btn-success w-50">
-    Save Changes
-</button>
-</div>
+           Save Changes
+        </button>
+        </div>
         
         @if (accountdoctorservice.currentDoctor()) {
           <app-photo-editor></app-photo-editor>

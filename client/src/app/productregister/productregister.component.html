@@ -1,24 +1,20 @@
-<form style="margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" class="container p-4 border rounded shadow-sm bg-light">
+<form style="width: 50%; margin-top:5%;" [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off" class="container p-4 border rounded shadow-sm bg-light">
     <h2 class="text-center text-primary mb-4">Add Product</h2>
     <hr>
 
     <div class="mb-3">
-        <label for="name" class="form-label fw-bold">Name</label>
-        <input type="text" id="name" class="form-control"  [formControl]="$any(registerForm.controls['name'])">
+        <input placeholder="Name" type="text" id="name" class="form-control"  [formControl]="$any(registerForm.controls['name'])">
     </div>
 
     <div class="mb-3">
-        <label for="price" class="form-label fw-bold">Price</label>
-        <input type="number" id="price" class="form-control"  [formControl]="$any(registerForm.controls['price'])">
+        <input placeholder="Price" type="number" id="price" class="form-control"  [formControl]="$any(registerForm.controls['price'])">
     </div>
 
     <div class="mb-3">
-        <label for="quantity" class="form-label fw-bold">Quantity</label>
-        <input type="number" id="quantity" class="form-control"  [formControl]="$any(registerForm.controls['quantity'])">
+        <input placeholder="Quantity" type="number" id="quantity" class="form-control"  [formControl]="$any(registerForm.controls['quantity'])">
     </div>
 
     <div class="mb-3">
-        <label for="storeId" class="form-label fw-bold">Choose Store</label>
         <select id="storeId" class="form-select" [formControl]="$any(registerForm.controls['storeId'])">
             <option value="" disabled selected>-- Select a Store --</option>
             @for (storee of stores; track $index) {
@@ -28,7 +24,6 @@
     </div>
 
     <div class="mb-3">
-        <label for="groupId" class="form-label fw-bold">Choose Group</label>
         <select id="groupId" class="form-select" [formControl]="$any(registerForm.controls['groupId'])">
             <option value="" disabled selected>-- Select a Group --</option>
             @for (groupe of groups; track $index) {

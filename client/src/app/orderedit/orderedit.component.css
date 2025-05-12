@@ -1,0 +1,75 @@
+/* Main Form Container */
+#editForm {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    max-width: 700px;
+    margin: 5rem auto;
+  }
+  
+  /* Title */
+  h2.text-primary {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+  
+  /* Labels */
+  .form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.4rem;
+  }
+  
+  /* Input Fields */
+  .form-control {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    color: #495057;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .form-control:read-only {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+  }
+  
+  /* Save Button */
+  button[type="submit"] {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.65rem 2.5rem;
+    border-radius: 2rem;
+    border: none;
+    color: white;
+    background-color: #198754;
+    transition: all 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #157347;
+    box-shadow: 0 4px 14px rgba(25, 135, 84, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  /* Debug Section */
+  .mt-3 p {
+    font-size: 0.85rem;
+    color: #6c757d;
+    word-break: break-word;
+  }
+  
+  /* Responsive Tweaks */
+  @media (max-width: 768px) {
+    #editForm {
+      padding: 1.5rem;
+    }
+  
+    button[type="submit"] {
+      width: 100%;
+    }
+  }
+  

@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 import { Adminaddeddoctor } from '../_models/adminaddeddoctor';
 import { Appointment } from '../_models/appointment';
 import { Observable } from 'rxjs';
+import { Schedule } from '../_models/schedule';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,9 @@ export class AppointmentService {
     return this.http.get<Adminaddeddoctor[]>(this.baseUrl + 'appointment/getAdmins', this.httpOptions);
   }
 
+  getdoctorschedule(id: number) {
+      return this.http.get<Schedule[]>(this.baseUrl + `appointment/doctorschedule/${id}`, this.httpOptions);
+  }
 
   register(model: any) {
     return this.http.post(this.baseUrl + 'appointment/registerappointment', model)

@@ -4,7 +4,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JsonPipe, NgIf } from '@angular/common';
+import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { AccountService } from '../_services/account.service';
 import { DoctormemberService } from '../_services/doctormember.service';
 import { PhotoEditorComponent } from '../photo-editor/photo-editor.component';
@@ -14,7 +14,7 @@ import { Photo } from '../_models/photo';
 @Component({
   selector: 'app-doctor-edit',
   standalone: true,
-  imports: [TabsModule, FormsModule, JsonPipe, NgIf, PhotoEditorComponent],
+  imports: [TabsModule, FormsModule, JsonPipe, NgIf, PhotoEditorComponent , NgFor],
   templateUrl: './doctor-edit.component.html',
   styleUrl: './doctor-edit.component.css'
 })
@@ -22,6 +22,10 @@ export class DoctorEditComponent implements OnInit {
 
   @ViewChild('editForm') editForm?: NgForm;
   
+  availableDays: number[] = [];
+  startTime: string = '';
+  endTime: string = '';
+
   myphotos: Array<Photo> = [];  
   doctoridbydoctor? : number ; 
   doctoridbyadmin? : number ; 
@@ -56,6 +60,17 @@ export class DoctorEditComponent implements OnInit {
     }
   }
 
+  onDayCheckboxChange(event: any) {
+    const day = +event.target.value;
+    if (event.target.checked) {
+      if (!this.availableDays.includes(day)) {
+        this.availableDays.push(day);
+      }
+    } else {
+      this.availableDays = this.availableDays.filter(d => d !== day);
+    }
+  }
+  
   loaddoctor(doctorid:number){
     this.doctormemberService.getphoto(doctorid).subscribe(x => this.myphotos = x);
     this.doctormemberService.getuserbyid(doctorid).subscribe({
@@ -69,8 +84,22 @@ export class DoctorEditComponent implements OnInit {
   }
 
 
-
   edit() {
+if(this.availableDays&&this.startTime&&this.endTime){
+
+  this.doctormemberService.updateSchedule(this.selecteduser!.id!, {
+    availableDays: this.availableDays,
+    startTime: this.startTime,
+    endTime: this.endTime
+  }).subscribe({
+    next: _ => this.toastr.success('Schedule updated'),
+    error: err => {
+      console.error(err);
+      this.toastr.error(err.error || 'Failed to update schedule');
+    } // Display the error message
+  });
+  
+}
     if (!this.hasChanges()) {
       this.toastr.info('No changes to save.');
       return;
@@ -89,7 +118,7 @@ export class DoctorEditComponent implements OnInit {
       age: this.selecteduser!.age!,
       fieldId: this.selecteduser!.fieldId!,
       adminId: this.selecteduser!.adminId!,
-      password: this.selecteduser?.password ,  // will be deleted if needed
+      password: this.selecteduser?.password ,  
       doctorPrice: this.selecteduser!.doctorPrice!
     };
     

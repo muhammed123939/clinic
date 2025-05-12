@@ -1,0 +1,85 @@
+/* Container */
+#editForm {
+    background-color: #fff;
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    max-width: 700px;
+    margin: auto;
+  }
+  
+  /* Headings */
+  h2.text-primary {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  /* Labels */
+  .form-label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Inputs and Selects */
+  .form-control {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+  }
+  
+  /* Readonly fields appearance */
+  .form-control[readonly] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+    opacity: 1;
+  }
+  
+  /* Error message */
+  .text-danger {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  
+  /* Button */
+  button[type="submit"] {
+    padding: 0.7rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 2rem;
+    background-color: #198754;
+    border: none;
+    color: white;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #157347;
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  /* Debug Info */
+  .mt-3 p {
+    font-size: 0.85rem;
+    color: #6c757d;
+    word-break: break-word;
+  }
+  
+  /* Responsive Improvements */
+  @media (max-width: 768px) {
+    #editForm {
+      padding: 1.5rem;
+    }
+  
+    button[type="submit"] {
+      width: 100%;
+    }
+  }
+  
