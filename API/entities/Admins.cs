@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace API.entities;
 
 public class Admins

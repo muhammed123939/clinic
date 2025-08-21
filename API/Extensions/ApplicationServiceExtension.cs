@@ -29,7 +29,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IStoreRepository, StoreRepository>();
         services.AddScoped<ItokenService, TokenService>();
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+        services.Configure<CloudinarySettings>(config.GetSection    ("CloudinarySettings"));
         return services;
     }
 }

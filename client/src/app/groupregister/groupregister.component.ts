@@ -9,7 +9,7 @@ import { TextInputComponent } from '../_forms/text-input/text-input.component';
 @Component({
   selector: 'app-groupregister',
   standalone: true,
-    imports: [ReactiveFormsModule, TextInputComponent, JsonPipe, FormsModule],
+  imports: [ReactiveFormsModule, TextInputComponent, JsonPipe, FormsModule],
   templateUrl: './groupregister.component.html',
   styleUrl: './groupregister.component.css'
 })

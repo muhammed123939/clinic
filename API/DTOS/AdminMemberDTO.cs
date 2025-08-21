@@ -10,6 +10,6 @@ public class AdminMemberDTO
     public bool? canDo { get; set; }
     public string? password { get; set; }
      public int storeId { get; set; }
-     }
+}
    
 

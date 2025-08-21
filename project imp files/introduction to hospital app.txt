@@ -1,5 +1,0 @@
-I worked as a full-stack developer on an ERP system for hospitals.
-
-Sign-Up & Login: Implemented authentication for admins and doctors, with specific permissions assigned to each admin.
-Components: Developed components to perform CRUD operations for admins, doctors, patients, and appointments, including a search feature by day for appointments.
-Doctor Portal: Created an edit component that allows doctors to update their personal information, upload their photo, and manage their appointments.
